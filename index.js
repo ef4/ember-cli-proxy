@@ -9,7 +9,9 @@ let Forwarder = require('./lib/forwarder');
 module.exports = {
   name: 'ember-cli-proxy',
 
-  isDevelopingAddon: function() { return true; },
+  included: function(app) {
+    app.import('vendor/url-polyfill/url.js');
+  },
 
   serverMiddleware: function(config) {
     let self = this;
@@ -30,10 +32,11 @@ module.exports = {
     if (!fs.existsSync(configPath)) {
       return {};
     }
+    let makeConfig = require(path.join(config.options.project.root, 'config', 'environment.js'));
     try {
       let makeProxyConfig = require(configPath);
       return new ProxyConfig(function() {
-        makeProxyConfig.call(this, config.options.environment);
+        makeProxyConfig.call(this, makeConfig(config.options.environment));
       });
     } catch(err) {
       this.ui.writeError(err);

@@ -625,5 +625,10 @@ function defineURL() {
   /* jshint ignore:end */
 }
 
-let URLClass = defineURL();
-module.exports = URLClass;
+if (typeof module !== 'undefined') {
+  var URLClass = defineURL();
+  module.exports = URLClass;
+} else if (typeof define !== 'undefined') {
+  /* global define */
+  define('url-polyfill', [], defineURL);
+}
