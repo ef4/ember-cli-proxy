@@ -5,19 +5,27 @@ let path = require('path');
 let fs = require('fs');
 let ProxyConfig = require('./lib/proxy-config');
 let Forwarder = require('./lib/forwarder');
+let browserPackage = require('./lib/browser-package');
 
 module.exports = {
   name: 'ember-cli-proxy',
 
   included: function(app) {
-    app.import('vendor/url-polyfill/url.js');
+    this.app = app;
+    app.import('vendor/ember-cli-proxy/url.js');
+    app.import('vendor/ember-cli-proxy/rewriter.js');
+    app.import('vendor/ember-cli-proxy/proxy.js');
+  },
+
+  treeForVendor: function() {
+    return browserPackage(this);
   },
 
   serverMiddleware: function(config) {
     let self = this;
     let expressApp = config.app;
     this.ui = config.options.ui;
-    this.proxyConfig = this.loadProxyConfig(config);
+    this.proxyConfig = this.loadProxyConfig();
     if (this.proxyConfig.invalid) {
       expressApp.use(function(req, res) {
         self.describeInvalidConfig(res);
@@ -27,20 +35,16 @@ module.exports = {
     }
   },
 
-  loadProxyConfig: function(config) {
-    let configPath = path.join(config.options.project.root, 'server', 'proxy.js');
-    if (!fs.existsSync(configPath)) {
-      return {};
-    }
-    let makeConfig = require(path.join(config.options.project.root, 'config', 'environment.js'));
+  loadProxyConfig: function() {
+    let proxyConfigPath = path.join(this.app.project.root, 'server', 'proxy.js');
     try {
-      let makeProxyConfig = require(configPath);
-      return new ProxyConfig(function() {
-        makeProxyConfig.call(this, makeConfig(config.options.environment));
-      });
+      return ProxyConfig.load(
+        path.join(this.app.project.root, 'config', 'environment.js'),
+        proxyConfigPath
+      );
     } catch(err) {
       this.ui.writeError(err);
-      return { invalid: err, source: configPath };
+      return { invalid: err, source: proxyConfigPath };
     }
   },
 
