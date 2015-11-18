@@ -1,21 +1,19 @@
 {
   "name": "ember-cli-proxy",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "A better proxy for ember-cli.",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
   "scripts": {
-    "build": "ember build",
-    "start": "ember server",
-    "test": "ember try:testall"
+    "test": "mocha tests/*-test.js"
   },
-  "repository": "",
+  "repository": "git@github.com:ef4/ember-cli-proxy.git",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Edward Faulkner <ef@alum.mit.edu>",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.2.0",
