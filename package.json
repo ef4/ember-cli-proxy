@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-proxy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A better proxy for ember-cli.",
   "directories": {
     "doc": "doc",
