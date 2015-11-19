@@ -1,11 +1,11 @@
 /* jshint node: true */
 'use strict';
 
-let path = require('path');
-let fs = require('fs');
-let ProxyConfig = require('./lib/proxy-config');
-let Forwarder = require('./lib/forwarder');
-let browserPackage = require('./lib/browser-package');
+var path = require('path');
+var fs = require('fs');
+var ProxyConfig = require('./lib/proxy-config');
+var Forwarder = require('./lib/forwarder');
+var browserPackage = require('./lib/browser-package');
 
 module.exports = {
   name: 'ember-cli-proxy',
@@ -22,8 +22,8 @@ module.exports = {
   },
 
   serverMiddleware: function(config) {
-    let self = this;
-    let expressApp = config.app;
+    var self = this;
+    var expressApp = config.app;
     this.ui = config.options.ui;
     this.proxyConfig = this.loadProxyConfig();
     if (this.proxyConfig.invalid) {
@@ -36,7 +36,7 @@ module.exports = {
   },
 
   loadProxyConfig: function() {
-    let proxyConfigPath = path.join(this.app.project.root, 'server', 'proxy.js');
+    var proxyConfigPath = path.join(this.app.project.root, 'server', 'proxy.js');
     try {
       return ProxyConfig.load(
         path.join(this.app.project.root, 'config', 'environment.js'),
@@ -49,7 +49,7 @@ module.exports = {
   },
 
   describeInvalidConfig: function(res) {
-    let error = this.proxyConfig.invalid;
+    var error = this.proxyConfig.invalid;
     res.status(500).send([
       "<pre>",
       "Error encountered in your proxy configuration",
